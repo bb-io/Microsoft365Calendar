@@ -12,7 +12,7 @@ public class MicrosoftOutlookApplication : BaseInvocable, IApplication, ICategor
 
     public IEnumerable<ApplicationCategory> Categories
     {
-        get => [ApplicationCategory.Communication, ApplicationCategory.Microsoft365Apps];
+        get => [ApplicationCategory.Microsoft365Apps];
         set { }
     }
     
@@ -23,7 +23,7 @@ public class MicrosoftOutlookApplication : BaseInvocable, IApplication, ICategor
 
     public string Name
     {
-        get => "Microsoft Outlook";
+        get => "Microsoft 365 Calendar";
         set { }
     }
 
