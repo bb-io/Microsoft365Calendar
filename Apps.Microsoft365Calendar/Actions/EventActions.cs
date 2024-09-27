@@ -13,6 +13,7 @@ using Microsoft.Kiota.Abstractions;
 
 namespace Apps.Microsoft365Calendar.Actions;
 
+[ActionList]
 public class EventActions
 {
     private const string EventBodyContentId = "EventBodyContentId";
