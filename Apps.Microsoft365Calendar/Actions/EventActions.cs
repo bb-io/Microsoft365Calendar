@@ -6,6 +6,7 @@ using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Authentication;
 using Blackbird.Applications.Sdk.Common.Dynamic;
+using Blackbird.Applications.Sdk.Common.Exceptions;
 using HtmlAgilityPack;
 using Microsoft.Graph.Models;
 using Microsoft.Graph.Models.ODataErrors;
@@ -36,7 +37,7 @@ public class EventActions
         }
         catch (ODataError error)
         {
-            throw new ArgumentException(error.Error.Message);
+            throw new PluginApplicationException(error.Error.Message);
         }
         return new ListEventsResponse
         {
@@ -57,7 +58,7 @@ public class EventActions
         }
         catch (ODataError error)
         {
-            throw new ArgumentException(error.Error.Message);
+            throw new PluginApplicationException(error.Error.Message);
         }
     }
     
@@ -80,7 +81,7 @@ public class EventActions
         }
         catch (ODataError error)
         {
-            throw new ArgumentException(error.Error.Message);
+            throw new PluginApplicationException(error.Error.Message);
         }
     }
     
@@ -106,7 +107,7 @@ public class EventActions
         }
         catch (ODataError error)
         {
-            throw new ArgumentException(error.Error.Message);
+            throw new PluginApplicationException(error.Error.Message);
         }
         return new ListEventsResponse
         {
@@ -136,7 +137,7 @@ public class EventActions
         }
         catch (ODataError error)
         {
-            throw new ArgumentException(error.Error.Message);
+            throw new PluginApplicationException(error.Error.Message);
         }
         return new ListEventsResponse
         {
@@ -178,10 +179,10 @@ public class EventActions
         if (request.RecurrencePattern != null)
         {
             if (request.Interval < 1) 
-                throw new ArgumentException("Recurrence interval must be greater than zero.");
+                throw new PluginMisconfigurationException("Recurrence interval must be greater than zero.");
             
             if (request.RecurrencePattern != "Daily" && (request.DaysOfWeek == null || !request.DaysOfWeek.Any()))
-                throw new ArgumentException("For weekly and monthly recurrence patterns days of week should be specified.");
+                throw new PluginMisconfigurationException("For weekly and monthly recurrence patterns days of week should be specified.");
 
             if (request.RecurrencePattern != "Daily")
             {
@@ -189,7 +190,7 @@ public class EventActions
                 {
                     var isValidDayOfWeek = daysOfWeek.Keys.Any(d => d == day.ToLower());
                     if (!isValidDayOfWeek)
-                        throw new ArgumentException($"Day of week '{day}' is not valid.");
+                        throw new PluginMisconfigurationException($"Day of week '{day}' is not valid.");
                 }
             }
             else
@@ -257,7 +258,7 @@ public class EventActions
         }
         catch (ODataError error)
         {
-            throw new ArgumentException(error.Error.Message);
+            throw new PluginApplicationException(error.Error.Message);
         }
         
         var createdEventDto = new EventDto(createdEvent);
@@ -310,7 +311,7 @@ public class EventActions
         }
         catch (ODataError error)
         {
-            throw new ArgumentException(error.Error.Message);
+            throw new PluginApplicationException(error.Error.Message);
         }
     }
 
@@ -350,7 +351,7 @@ public class EventActions
         }
         catch (ODataError error)
         {
-            throw new ArgumentException(error.Error.Message);
+            throw new PluginApplicationException(error.Error.Message);
         }
     }
 
