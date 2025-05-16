@@ -5,6 +5,7 @@ using Apps.MicrosoftOutlook.Models.Calendar.Responses;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Authentication;
+using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Microsoft.Graph.Models;
 using Microsoft.Graph.Models.ODataErrors;
@@ -43,7 +44,11 @@ public class CalendarActions(InvocationContext invocationContext) : AppInvocable
             }
             catch (ODataError error)
             {
-                throw new ArgumentException(error.Error.Message);
+                throw new PluginApplicationException(error.Error.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new PluginApplicationException(ex.InnerException.ToString());
             }
         }
         
@@ -72,7 +77,7 @@ public class CalendarActions(InvocationContext invocationContext) : AppInvocable
         }
         catch (ODataError error)
         {
-            throw new ArgumentException(error.Error.Message);
+            throw new PluginApplicationException(error.Error.Message);
         }
     }
     
@@ -104,7 +109,7 @@ public class CalendarActions(InvocationContext invocationContext) : AppInvocable
         }
         catch (ODataError error)
         {
-            throw new ArgumentException(error.Error.Message);
+            throw new PluginApplicationException(error.Error.Message);
         }
     }
     
@@ -132,7 +137,7 @@ public class CalendarActions(InvocationContext invocationContext) : AppInvocable
         }
         catch (ODataError error)
         {
-            throw new ArgumentException(error.Error.Message);
+            throw new PluginApplicationException(error.Error.Message);
         }
         
         var renamedCalendarDto = new CalendarDto(renamedCalendar);
@@ -154,7 +159,7 @@ public class CalendarActions(InvocationContext invocationContext) : AppInvocable
         }
         catch (ODataError error)
         {
-            throw new ArgumentException(error.Error.Message);
+            throw new PluginApplicationException(error.Error.Message);
         }
     }
 
