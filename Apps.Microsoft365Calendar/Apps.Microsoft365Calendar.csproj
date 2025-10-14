@@ -6,13 +6,13 @@
         <Nullable>enable</Nullable>
         <Product>Microsoft 365 Calendar</Product>
         <Description>Microsoft 365 Calendar app that allows you to access and manage your calendar events.</Description>
-        <Version>1.0.5</Version>
+        <Version>1.0.6</Version>
         <PackageId>Apps.Microsoft365Calendar</PackageId>
         <AssemblyName>Apps.Microsoft365Calendar</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Blackbird.Applications.Sdk.Common" Version="2.12.0" />
+        <PackageReference Include="Blackbird.Applications.Sdk.Common" Version="2.14.0" />
         <PackageReference Include="Blackbird.Applications.Sdk.Utils" Version="1.0.19" />
         <PackageReference Include="HtmlAgilityPack" Version="1.11.65" />
         <PackageReference Include="Microsoft.Graph" Version="5.57.0" />

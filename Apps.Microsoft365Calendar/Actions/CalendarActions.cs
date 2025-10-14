@@ -12,7 +12,7 @@ using Microsoft.Graph.Models.ODataErrors;
 
 namespace Apps.Microsoft365Calendar.Actions;
 
-[ActionList]
+[ActionList("Calendars")]
 public class CalendarActions(InvocationContext invocationContext) : AppInvocable(invocationContext)
 {
      #region GET
