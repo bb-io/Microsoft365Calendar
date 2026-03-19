@@ -3,15 +3,30 @@ using Blackbird.Applications.Sdk.Common.Connections;
 
 namespace Apps.Microsoft365Calendar.Connections;
 
-public class ConnectionValidator: IConnectionValidator
+public class ConnectionValidator : IConnectionValidator
 {
     public async ValueTask<ConnectionValidationResponse> ValidateConnection(
         IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProviders,
         CancellationToken cancellationToken)
     {
-        return new()
+        var client = new MicrosoftOutlookClient(authenticationCredentialsProviders);
+
+        try
         {
-            IsValid = true
-        };
+            await client.Me.GetAsync(cancellationToken: cancellationToken);
+            return new ConnectionValidationResponse
+            {
+                IsValid = true,
+                Message = "Success"
+            };
+        }
+        catch (Exception)
+        {
+            return new ConnectionValidationResponse
+            {
+                IsValid = false,
+                Message = "Ping failed"
+            };
+        }
     }
 }

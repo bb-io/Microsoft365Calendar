@@ -1,22 +1,36 @@
-﻿using System.Text.Json;
-using Blackbird.Applications.Sdk.Common;
+﻿using Blackbird.Applications.Sdk.Common;
+using Blackbird.Applications.Sdk.Common.Authentication;
 using Blackbird.Applications.Sdk.Common.Authentication.OAuth2;
 using Blackbird.Applications.Sdk.Common.Invocation;
+using System.Text.Json;
 
 namespace Apps.Microsoft365Calendar.Auth.OAuth2;
 
 public class OAuth2TokenService(InvocationContext invocationContext)
-    : BaseInvocable(invocationContext), IOAuth2TokenService
-{ 
+    : BaseInvocable(invocationContext), IOAuth2TokenService, ITokenRefreshable
+{
     private const string TokenUrl = "https://login.microsoftonline.com/common/oauth2/v2.0/token";
     private const string ExpiresAtKeyName = "expires_at";
 
-    public bool IsRefreshToken(Dictionary<string, string> values) 
+    public bool IsRefreshToken(Dictionary<string, string> values)
         => values.TryGetValue(ExpiresAtKeyName, out var expireValue) && DateTime.UtcNow > DateTime.Parse(expireValue);
-    
-    public async Task<Dictionary<string, string>> RefreshToken(Dictionary<string, string> values, 
-        CancellationToken cancellationToken) 
-    { 
+
+    public int? GetRefreshTokenExprireInMinutes(Dictionary<string, string> values)
+    {
+        if (!values.TryGetValue(ExpiresAtKeyName, out var expireValue))
+            return null;
+
+        if (!DateTime.TryParse(expireValue, out var expireDate))
+            return null;
+
+        var difference = expireDate - DateTime.UtcNow;
+
+        return (int)difference.TotalMinutes - 5;
+    }
+
+    public async Task<Dictionary<string, string>> RefreshToken(Dictionary<string, string> values,
+        CancellationToken cancellationToken)
+    {
         const string grantType = "refresh_token";
         var bodyParameters = new Dictionary<string, string>
         {
@@ -27,16 +41,16 @@ public class OAuth2TokenService(InvocationContext invocationContext)
         };
         return await RequestToken(bodyParameters, cancellationToken);
     }
-    
-    public async Task<Dictionary<string, string?>> RequestToken(string state, string code, 
+
+    public async Task<Dictionary<string, string?>> RequestToken(string state, string code,
         Dictionary<string, string> values, CancellationToken cancellationToken)
-    { 
-        const string grantType = "authorization_code"; 
-        var bodyParameters = new Dictionary<string, string> 
-        { 
+    {
+        const string grantType = "authorization_code";
+        var bodyParameters = new Dictionary<string, string>
+        {
             { "code", code },
             { "grant_type", grantType },
-            { "client_id", ApplicationConstants.ClientId }, 
+            { "client_id", ApplicationConstants.ClientId },
             { "client_secret", ApplicationConstants.ClientSecret },
             { "redirect_uri", $"{InvocationContext.UriInfo.BridgeServiceUrl.ToString().TrimEnd('/')}/AuthorizationCode" }
         };
@@ -44,21 +58,21 @@ public class OAuth2TokenService(InvocationContext invocationContext)
     }
 
     public Task RevokeToken(Dictionary<string, string> values)
-    { 
+    {
         throw new NotImplementedException();
     }
-    
-    private async Task<Dictionary<string, string>> RequestToken(Dictionary<string, string> bodyParameters, 
+
+    private async Task<Dictionary<string, string>> RequestToken(Dictionary<string, string> bodyParameters,
         CancellationToken cancellationToken)
-    { 
+    {
         var utcNow = DateTime.UtcNow;
-        using HttpClient httpClient = new HttpClient(); 
-        httpClient.DefaultRequestHeaders.Add("Accept", "application/json"); 
-        using var httpContent = new FormUrlEncodedContent(bodyParameters); 
-        using var response = await httpClient.PostAsync(TokenUrl, httpContent, cancellationToken); 
-        var responseContent = await response.Content.ReadAsStringAsync(); 
+        using HttpClient httpClient = new HttpClient();
+        httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+        using var httpContent = new FormUrlEncodedContent(bodyParameters);
+        using var response = await httpClient.PostAsync(TokenUrl, httpContent, cancellationToken);
+        var responseContent = await response.Content.ReadAsStringAsync();
         var resultDictionary = JsonSerializer.Deserialize<Dictionary<string, object>>(responseContent)?
-                                       .ToDictionary(r => r.Key, r => r.Value?.ToString()) 
+                                       .ToDictionary(r => r.Key, r => r.Value?.ToString())
                                    ?? throw new InvalidOperationException($"Invalid response content: {responseContent}");
         var expiresIn = int.Parse(resultDictionary["expires_in"]);
         var expiresAt = utcNow.AddSeconds(expiresIn);

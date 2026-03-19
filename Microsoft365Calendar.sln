@@ -1,5 +1,16 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.4.11612.150 stable
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Apps.Microsoft365Calendar", "Apps.Microsoft365Calendar\Apps.Microsoft365Calendar.csproj", "{EB25604E-8EBA-464E-BEDF-30EA95395AD3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Microsoft365Calendar", "Tests.Microsoft365Calendar\Tests.Microsoft365Calendar.csproj", "{5D94ABF4-22BF-4D95-98F8-5D7D15E66BA1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A463CE5B-0D97-4488-AEAD-E8CDDC9860CF}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,5 +22,15 @@ Global
 		{EB25604E-8EBA-464E-BEDF-30EA95395AD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB25604E-8EBA-464E-BEDF-30EA95395AD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB25604E-8EBA-464E-BEDF-30EA95395AD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D94ABF4-22BF-4D95-98F8-5D7D15E66BA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D94ABF4-22BF-4D95-98F8-5D7D15E66BA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D94ABF4-22BF-4D95-98F8-5D7D15E66BA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D94ABF4-22BF-4D95-98F8-5D7D15E66BA1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B6F46361-0210-4EDE-A197-53B88CAFE6AE}
 	EndGlobalSection
 EndGlobal

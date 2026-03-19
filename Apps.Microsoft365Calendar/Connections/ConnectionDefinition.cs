@@ -5,22 +5,19 @@ namespace Apps.Microsoft365Calendar.Connections;
 
 public class ConnectionDefinition : IConnectionDefinition
 {
-    public IEnumerable<ConnectionPropertyGroup> ConnectionPropertyGroups => new List<ConnectionPropertyGroup>
-    {
+    public IEnumerable<ConnectionPropertyGroup> ConnectionPropertyGroups =>
+    [
         new()
         {
-            Name = "Developer API key",
-            AuthenticationType = ConnectionAuthenticationType.Undefined,
-            ConnectionUsage = ConnectionUsage.Actions,
-            ConnectionProperties = new List<ConnectionProperty>
-            {
-            }
-        }
-    };
+            Name = "OAuth",
+            AuthenticationType = ConnectionAuthenticationType.OAuth2,
+            ConnectionProperties = []
+        },
+    ];
 
-    public IEnumerable<AuthenticationCredentialsProvider> CreateAuthorizationCredentialsProviders(
-        Dictionary<string, string> values) =>
-        values.Select(x =>
-                new AuthenticationCredentialsProvider(AuthenticationCredentialsRequestLocation.None, x.Key, x.Value))
-            .ToList();
+    public IEnumerable<AuthenticationCredentialsProvider> CreateAuthorizationCredentialsProviders(Dictionary<string, string> values)
+    {
+        var token = values.First(v => v.Key == "access_token");
+        yield return new AuthenticationCredentialsProvider("Authorization", $"{token.Value}");
+    }
 }
