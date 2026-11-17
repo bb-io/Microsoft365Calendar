@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <Product>Microsoft 365 Calendar</Product>
         <Description>Microsoft 365 Calendar app that allows you to access and manage your calendar events.</Description>
-        <Version>1.0.7</Version>
+        <Version>1.0.8</Version>
         <PackageId>Apps.Microsoft365Calendar</PackageId>
         <AssemblyName>Apps.Microsoft365Calendar</AssemblyName>
     </PropertyGroup>
@@ -23,9 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\README.md">
-        <Link>README.md</Link>
-      </Content>
+      <EmbeddedResource Include="..\README.md" Link="README.md" CopyToOutputDirectory="Always" />
     </ItemGroup>
 
 </Project>
